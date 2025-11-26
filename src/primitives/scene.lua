@@ -8,16 +8,16 @@ local Object = require "src.utils.object"
 ---@field children {[number]: Scene}
 ---@field x number
 ---@field y number
-local Scene = Object:inherits()
+local Scene = Object:inherit()
 
 function Scene.new()
-    local self = Scene.super.new()
+    local self = setmetatable(Scene.super.new(), { __index = Scene })
     self.id = uid.generate()
     self.parent = nil
     self.children = {}
     self.x = 0
     self.y = 0
-    return setmetatable(self, { __index = Scene })
+    return self
 end
 
 ---@param dt number

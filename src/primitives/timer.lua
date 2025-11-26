@@ -4,15 +4,15 @@ local Scene = require "src.primitives.scene"
 ---@field interval number
 ---@field fn fun()
 ---@field count number
-local Timer = Scene:inherits()
+local Timer = Scene:inherit()
 
 ---@param args { interval: number, leading: boolean, fn: fun() }
 function Timer.new(args)
-    local self = Timer.super.new()
+    local self = setmetatable(Timer.super.new(), { __index = Timer })
     self.interval = args.interval or 0
     self.fn = args.fn or (function() end)
     self.count = args.leading and self.interval or 0
-    return setmetatable(self, { __index = Timer })
+    return self
 end
 
 function Timer:update(dt)

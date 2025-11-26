@@ -5,17 +5,17 @@ local Scene = require "src.primitives.scene"
 ---@field _original_size number
 ---@field size number
 ---@field decay_factor number
-local Particle = Scene:inherits()
+local Particle = Scene:inherit()
 
 function Particle.new()
-    local self = Particle.super.new()
+    local self = setmetatable(Particle.super.new(), { __index = Particle })
     self.color = { math.random(127, 255) / 255, math.random(127, 255) / 255, math.random(127, 255) / 255, 1 }
     self._original_size = math.random(5, 20)
     self.size = self._original_size
     self.decay_factor = math.random(1, 3)
     self.x = math.random(0, love.graphics.getWidth())
     self.y = math.random(0, love.graphics.getHeight())
-    return setmetatable(self, { __index = Particle })
+    return self
 end
 
 function Particle:update(dt)

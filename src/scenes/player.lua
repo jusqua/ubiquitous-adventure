@@ -3,15 +3,15 @@ local Scene = require "src.primitives.scene"
 ---@class Player : Scene
 ---@field speed number
 ---@field size number
-local Player = Scene:inherits()
+local Player = Scene:inherit()
 
 function Player.new()
-    local self = Player.super.new()
+    local self = setmetatable(Player.super.new(), { __index = Player })
     self.size = 10
     self.speed = 200
     self.x = self.size / 2
     self.y = self.size / 2
-    return setmetatable(self, { __index = Player })
+    return self
 end
 
 function Player:update(dt)
