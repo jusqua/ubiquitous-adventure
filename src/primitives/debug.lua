@@ -32,11 +32,12 @@ function Debug.new()
 end
 
 function Debug:draw()
+    local font_height = fonts.medodica:getHeight()
     love.graphics.setColor(1, 0, 1)
     love.graphics.setFont(fonts.medodica)
-    love.graphics.print("Used Memory: " .. self.used_mem .. " Kb")
-    love.graphics.print("FPS: " .. self.fps_count .. (self.vsync_state ~= 0 and " (VSync)" or ""), 0,
-        fonts.medodica:getHeight())
+    love.graphics.print("Instances: " .. (self.parent and self.parent.family_list.count or 0))
+    love.graphics.print("Used Memory: " .. self.used_mem .. " Kb", 0, font_height)
+    love.graphics.print("FPS: " .. self.fps_count .. (self.vsync_state ~= 0 and " (VSync)" or ""), 0, font_height * 2)
 end
 
 return Debug
