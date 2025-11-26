@@ -1,29 +1,23 @@
 local uid = require "src.utils.uid"
+local Object = require "src.utils.object"
 
----@class Scene
+---@class Scene : Object
 ---@field super Scene
 ---@field id number
 ---@field parent Scene?
 ---@field children {[number]: Scene}
 ---@field x number
 ---@field y number
-local Scene = {}
+local Scene = Object:inherits()
 
 function Scene.new()
-    local self = {}
+    local self = Scene.super.new()
     self.id = uid.generate()
-    self.super = Scene
     self.parent = nil
     self.children = {}
     self.x = 0
     self.y = 0
     return setmetatable(self, { __index = Scene })
-end
-
-function Scene:inherits()
-    local other = setmetatable({}, { __index = self })
-    other.super = self
-    return other
 end
 
 ---@param dt number
