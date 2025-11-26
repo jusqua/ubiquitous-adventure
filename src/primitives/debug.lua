@@ -6,7 +6,7 @@ local fonts = require "src.utils.fonts"
 ---@field fps_count number
 ---@field used_mem number
 ---@field vsync_state number
-local Debug = Scene:inherit()
+local Debug = Scene:inherit("Debug")
 
 function Debug.new()
     local self = setmetatable(Debug.super.new(), { __index = Debug })

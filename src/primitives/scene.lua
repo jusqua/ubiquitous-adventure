@@ -8,7 +8,7 @@ local Object = require "src.utils.object"
 ---@field children {[number]: Scene}
 ---@field x number
 ---@field y number
-local Scene = Object:inherit()
+local Scene = Object:inherit("Scene")
 
 function Scene.new()
     local self = setmetatable(Scene.super.new(), { __index = Scene })

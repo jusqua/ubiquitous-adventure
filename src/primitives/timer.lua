@@ -4,7 +4,7 @@ local Scene = require "src.primitives.scene"
 ---@field interval number
 ---@field fn fun()
 ---@field count number
-local Timer = Scene:inherit()
+local Timer = Scene:inherit("Timer")
 
 ---@param args { interval: number, leading: boolean, fn: fun() }
 function Timer.new(args)

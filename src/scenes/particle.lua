@@ -5,7 +5,7 @@ local Scene = require "src.primitives.scene"
 ---@field _original_size number
 ---@field size number
 ---@field decay_factor number
-local Particle = Scene:inherit()
+local Particle = Scene:inherit("Particle")
 
 function Particle.new()
     local self = setmetatable(Particle.super.new(), { __index = Particle })
