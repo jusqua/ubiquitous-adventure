@@ -26,7 +26,7 @@ function Particle:update(dt)
 end
 
 function Particle:draw()
-    love.graphics.setColor(1, 1, 1, self.size / self._original_size)
+    love.graphics.setColor(self.color, self.size / self._original_size)
     love.graphics.circle("fill", self.x - self.size / 2, self.y - self.size / 2, self.size)
 end
 
