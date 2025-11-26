@@ -1,13 +1,15 @@
 local Scene = require "src.primitives.scene"
+local Debug = require "src.primitives.debug"
 local Player = require "src.scenes.player"
 local Particle = require "src.scenes.particle"
 
----@type Scene
 local scene
+local debug
 
 function love.load()
-    scene = Scene:new()
-    scene:attach(Player:new())
+    scene = Scene.new()
+    scene:attach(Player.new())
+    debug = Debug.new()
 end
 
 function love.update(dt)
@@ -20,6 +22,13 @@ function love.keypressed(key, scancode, isrepeat)
     end
     if key == "space" then
         scene:attach(Particle.new())
+    end
+    if key == "f3" then
+        if debug.parent then
+            debug:detach()
+        else
+            scene:attach(debug)
+        end
     end
 end
 
