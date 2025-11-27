@@ -1,13 +1,15 @@
 local Scene = require "src.primitives.scene"
 local Timer = require "src.primitives.timer"
-local fonts = require "src.utils.fonts"
+local fonts = require 'src.constants.fonts'
 
 ---@class Debug : Scene
+---@field super Scene
 ---@field fps_count number
 ---@field used_mem number
 ---@field vsync_state number
 local Debug = Scene:inherit("Debug")
 
+---@return Debug
 function Debug.new()
     local self = setmetatable(Debug.super.new(), { __index = Debug })
     self.fps_count = 0

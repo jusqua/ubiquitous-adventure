@@ -1,8 +1,8 @@
 ---@class Object
----@field super Object
+---@field super nil
 ---@field private __instance_of { [Object]: boolean }
 local Object = {}
-Object.super = Object
+Object.super = nil
 Object.__index = Object
 Object.__name = "Object"
 Object.__instance_of = { [Object] = true }

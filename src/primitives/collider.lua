@@ -1,12 +1,14 @@
 local Scene = require "src.primitives.scene"
 
 ---@class Collider : Scene
+---@field super Scene
 ---@field width number
 ---@field height number
 ---@field collisions Collider[]
 local Collider = Scene:inherit("Collider")
 
----@param args { size: number, width: number, height: number }?
+---@param args? { size?: number, width?: number, height?: number }
+---@return Collider
 function Collider.new(args)
     local self = setmetatable(Collider.super.new(), { __index = Collider })
     args = args or {}
@@ -28,7 +30,6 @@ function Collider:update(dt)
     local root = self:getFamilyRoot()
     for _, scene in pairs(root.family_list.children) do
         if scene.id ~= self.id and scene:isInstanceOf(Collider) then
-            ---@cast scene Collider
             if self:isCollidingWith(scene) then
                 table.insert(self.collisions, scene)
             end
@@ -37,15 +38,18 @@ function Collider:update(dt)
 end
 
 function Collider:debugDraw()
+    self.super.debugDraw(self)
+
     if #self.collisions > 0 then
         love.graphics.setColor(1, 0, 0, .5)
     else
         love.graphics.setColor(1, 1, 0, .5)
     end
+    local collider = self.parent or self
     love.graphics.rectangle(
         "fill",
-        self.parent.x - self.width / 2,
-        self.parent.y - self.height / 2,
+        collider.x - self.width / 2,
+        collider.y - self.height / 2,
         self.width,
         self.height
     )
@@ -53,7 +57,7 @@ end
 
 ---@return { x1: number, y1: number, x2: number, y2: number }
 function Collider:getBounds()
-    local collider = self.parent and self.parent or self
+    local collider = self.parent or self
     return {
         x1 = collider.x - self.width / 2,
         y1 = collider.y - self.height / 2,

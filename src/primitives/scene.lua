@@ -1,16 +1,19 @@
 local uid = require "src.utils.uid"
-local Object = require "src.utils.object"
+local Object = require 'src.primitives.object'
+
+---@alias SceneMap table<number,Scene>
 
 ---@class Scene : Object
----@field super Scene
+---@field super Object
 ---@field id number
 ---@field parent Scene?
----@field family_tree { count: number, children: { [number]: Scene } }
----@field family_list { count: number, children: { [number]: Scene } }
+---@field family_tree { count: number, children: SceneMap }
+---@field family_list { count: number, children: SceneMap }
 ---@field x number
 ---@field y number
 local Scene = Object:inherit("Scene")
 
+---@return Scene
 function Scene.new()
     local self = setmetatable(Scene.super.new(), { __index = Scene })
     self.id = uid.generate()
@@ -53,6 +56,7 @@ function Scene:getUID()
 end
 
 ---Get the root scene
+---@return Scene
 function Scene:getFamilyRoot()
     if self.parent then
         return self.parent:getFamilyRoot()
@@ -104,6 +108,7 @@ function Scene:detach()
             node.family_list.count = node.family_list.count - 1
         end
 
+        ---@diagnostic disable-next-line
         node = node.parent
     end
 

@@ -1,10 +1,12 @@
 local Scene = require "src.primitives.scene"
 local Debug = require "src.primitives.debug"
 local Player = require "src.scenes.player"
-local Entity = require "src.scenes.entity"
+local Entity = require 'src.primitives.entity'
 local Particle = require "src.scenes.particle"
 
+---@type Scene
 local scene
+---@type Debug
 local debug
 
 function love.load()

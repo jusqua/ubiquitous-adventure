@@ -1,9 +1,11 @@
-local Entity = require "src.scenes.entity"
+local Entity = require 'src.primitives.entity'
 
----@class Player : Scene
+---@class Player : Entity
+---@field super Entity
 local Player = Entity:inherit("Player")
 
----@param args? { x: number, y: number, size: number, width: number, height: number, speed: number, color: [number, number, number, number?] }
+---@param args { x?: number, y?: number, size?: number, width?: number, height?: number, speed?: number, color?: [number, number, number, number?] }
+---@return Player
 function Player.new(args)
     args = args or {}
     args.collidable = true

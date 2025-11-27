@@ -1,9 +1,9 @@
 local counter = -1
-local uid = {}
+local M = {}
 
-function uid.generate()
+function M.generate()
     counter = counter + 1
     return counter
 end
 
-return uid
+return M
