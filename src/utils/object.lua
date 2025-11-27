@@ -5,7 +5,7 @@ local Object = {}
 Object.super = Object
 Object.__index = Object
 Object.__name = "Object"
-Object.__instance_of = { Object = true }
+Object.__instance_of = { [Object] = true }
 
 function Object.new()
     return setmetatable({}, { __index = Object })
@@ -13,13 +13,13 @@ end
 
 ---@param name string
 function Object:inherit(name)
-    local other = setmetatable({}, { __index = self })
+    local other = setmetatable(self.new(), { __index = self })
     other.super = self
+    other.__name = name
+    other.__instance_of = { [other] = true }
     for key, value in pairs(self.__instance_of) do
         other.__instance_of[key] = value
     end
-    other.__instance_of[other] = true
-    other.__name = name
     return other
 end
 
