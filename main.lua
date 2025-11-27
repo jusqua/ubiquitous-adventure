@@ -1,6 +1,7 @@
 local Scene = require "src.primitives.scene"
 local Debug = require "src.primitives.debug"
 local Player = require "src.scenes.player"
+local Entity = require "src.scenes.entity"
 local Particle = require "src.scenes.particle"
 
 local scene
@@ -8,7 +9,12 @@ local debug
 
 function love.load()
     scene = Scene.new()
-    scene:attach(Player.new())
+    scene:attach(Player.new({ speed = 200 }))
+    scene:attach(Entity.new({
+        size = 40,
+        x = love.graphics.getWidth() / 2 - 20,
+        y = love.graphics.getHeight() / 2 - 20
+    }))
     debug = Debug.new()
 end
 

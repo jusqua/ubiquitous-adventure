@@ -1,20 +1,19 @@
-local Scene = require "src.primitives.scene"
+local Entity = require "src.scenes.entity"
 
 ---@class Player : Scene
----@field speed number
----@field size number
-local Player = Scene:inherit("Player")
+local Player = Entity:inherit("Player")
 
-function Player.new()
-    local self = setmetatable(Player.super.new(), { __index = Player })
-    self.size = 10
-    self.speed = 200
-    self.x = self.size / 2
-    self.y = self.size / 2
-    return self
+---@param args? { x: number, y: number, size: number, width: number, height: number, speed: number, color: [number, number, number, number?] }
+function Player.new(args)
+    args = args or {}
+    args.collidable = true
+
+    return setmetatable(Player.super.new(args), { __index = Player })
 end
 
 function Player:update(dt)
+    self.super.update(self, dt)
+
     if love.keyboard.isDown("w", "up") then
         self.y = self.y - self.speed * dt
     end
@@ -27,11 +26,6 @@ function Player:update(dt)
     if love.keyboard.isDown("d", "right") then
         self.x = self.x + self.speed * dt
     end
-end
-
-function Player:draw()
-    love.graphics.setColor(1, 1, 1)
-    love.graphics.rectangle("fill", self.x - self.size / 2, self.y - self.size / 2, self.size, self.size)
 end
 
 return Player

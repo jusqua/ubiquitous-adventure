@@ -29,10 +29,27 @@ function Scene:update(dt)
     end
 end
 
+---@param dt number
+function Scene:debugUpdate(dt)
+    for _, scene in pairs(self.family_tree.children) do
+        scene:debugUpdate(dt)
+    end
+end
+
 function Scene:draw()
     for _, scene in pairs(self.family_tree.children) do
         scene:draw()
     end
+end
+
+function Scene:debugDraw()
+    for _, scene in pairs(self.family_tree.children) do
+        scene:debugDraw()
+    end
+end
+
+function Scene:getUID()
+    return self.id .. ":" .. self:getType()
 end
 
 ---Get the root scene
@@ -64,6 +81,7 @@ function Scene:attach(other)
         node = node.parent
     end
 
+    print(other:getUID() .. " attached to " .. self:getUID())
     other.parent = self
 end
 
@@ -89,6 +107,7 @@ function Scene:detach()
         node = node.parent
     end
 
+    print(self:getUID() .. " detached from " .. self.parent:getUID())
     self.parent = nil
 end
 

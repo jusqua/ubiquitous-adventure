@@ -31,13 +31,40 @@ function Debug.new()
     return self
 end
 
+function Debug:update(dt)
+    self.super.update(self, dt)
+
+    if self.parent then
+        self.parent:debugUpdate(dt)
+    end
+end
+
 function Debug:draw()
+    if not self.parent then
+        return
+    end
+
     local font_height = fonts.medodica:getHeight()
     love.graphics.setColor(1, 0, 1)
     love.graphics.setFont(fonts.medodica)
-    love.graphics.print("Instances: " .. (self.parent and self.parent.family_list.count or 0))
+    love.graphics.print("Instances: " .. self.parent.family_list.count + 1)
     love.graphics.print("Used Memory: " .. self.used_mem .. " Kb", 0, font_height)
     love.graphics.print("FPS: " .. self.fps_count .. (self.vsync_state ~= 0 and " (VSync)" or ""), 0, font_height * 2)
+
+    local y = love.graphics.getHeight() - font_height
+    local instances = { self.parent:getUID() }
+    for _, scene in pairs(self.parent.family_list.children) do
+        instances[#instances] = instances[#instances] .. ", "
+        if fonts.medodica:getWidth(instances[#instances] .. scene:getUID()) > love.graphics.getWidth() then
+            table.insert(instances, "")
+        end
+        instances[#instances] = instances[#instances] .. scene:getUID()
+    end
+    for i, text in pairs(instances) do
+        love.graphics.print(text, 0, love.graphics.getHeight() - font_height * (#instances - i + 1))
+    end
+
+    self.parent:debugDraw()
 end
 
 return Debug
