@@ -47,32 +47,49 @@ end
 ---@param other Scene
 function Scene:attach(other)
     other:detach()
-    other.parent = self
-    other.parent.family_tree.children[other.id] = other
-    other.parent.family_tree.count = other.parent.family_tree.count + 1
 
-    local scene = self
-    while scene do
-        scene.family_list.children[other.id] = other
-        scene.family_list.count = scene.family_list.count + 1
-        scene = scene.parent
+    self.family_tree.children[other.id] = other
+    self.family_tree.count = self.family_tree.count + 1
+
+    local node = self
+    while node do
+        node.family_list.children[other.id] = other
+        node.family_list.count = node.family_list.count + 1
+
+        for _, scene in pairs(other.family_list.children) do
+            node.family_list.children[scene.id] = scene
+            node.family_list.count = node.family_list.count + 1
+        end
+
+        node = node.parent
     end
+
+    other.parent = self
 end
 
 ---Turn the scene orphaned
 function Scene:detach()
-    local scene = self.parent
-    while scene do
-        scene.family_list.children[self.id] = nil
-        scene.family_list.count = scene.family_list.count - 1
-        scene = scene.parent
+    if not self.parent then
+        return
     end
 
-    if self.parent then
-        self.parent.family_tree.children[self.id] = nil
-        self.parent.family_tree.count = self.parent.family_tree.count - 1
-        self.parent = nil
+    self.parent.family_tree.children[self.id] = nil
+    self.parent.family_tree.count = self.parent.family_tree.count - 1
+
+    local node = self.parent
+    while node do
+        node.family_list.children[self.id] = nil
+        node.family_list.count = node.family_list.count - 1
+
+        for _, scene in pairs(self.family_list.children) do
+            node.family_list.children[scene.id] = nil
+            node.family_list.count = node.family_list.count - 1
+        end
+
+        node = node.parent
     end
+
+    self.parent = nil
 end
 
 ---Destroy the scene and its children
