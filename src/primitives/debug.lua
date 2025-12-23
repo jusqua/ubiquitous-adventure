@@ -1,6 +1,7 @@
 local Scene = require "src.primitives.scene"
 local Timer = require "src.primitives.timer"
-local fonts = require 'src.constants.fonts'
+local FONTS = require 'src.constants.fonts'
+local LAYERS = require "src.constants.layers"
 
 ---@class Debug : Scene
 ---@field super Scene
@@ -12,6 +13,7 @@ local Debug = Scene:inherit("Debug")
 ---@return Debug
 function Debug.new()
     local self = setmetatable(Debug.super.new(), { __index = Debug })
+    self.current_layer = LAYERS.debug
     self.fps_count = 0
     self.used_mem = 0
     self.vsync_state = 0
@@ -33,40 +35,43 @@ function Debug.new()
     return self
 end
 
-function Debug:update(dt)
-    self.super.update(self, dt)
-
-    if self.parent then
-        self.parent:debugUpdate(dt)
-    end
-end
-
 function Debug:draw()
     if not self.parent then
         return
     end
 
-    local font_height = fonts.medodica:getHeight()
+    for _, scenes in pairs(self.parent.layer_list.children) do
+        for _, scene in pairs(scenes) do
+            scene:debug()
+        end
+    end
+end
+
+function Debug:debug()
+    if not self.parent then
+        return
+    end
+
+    local font_height = FONTS.medodica:getHeight()
     love.graphics.setColor(1, 0, 1)
-    love.graphics.setFont(fonts.medodica)
-    love.graphics.print("Instances: " .. self.parent.family_list.count + 1)
+    love.graphics.setFont(FONTS.medodica)
+    love.graphics.print("Instances: " .. self.parent.layer_list.count + 1)
     love.graphics.print("Used Memory: " .. self.used_mem .. " Kb", 0, font_height)
     love.graphics.print("FPS: " .. self.fps_count .. (self.vsync_state ~= 0 and " (VSync)" or ""), 0, font_height * 2)
 
-    local y = love.graphics.getHeight() - font_height
     local instances = { self.parent:getUID() }
-    for _, scene in pairs(self.parent.family_list.children) do
-        instances[#instances] = instances[#instances] .. ", "
-        if fonts.medodica:getWidth(instances[#instances] .. scene:getUID()) > love.graphics.getWidth() then
-            table.insert(instances, "")
+    for _, scenes in pairs(self.parent.layer_list.children) do
+        for _, scene in pairs(scenes) do
+            instances[#instances] = instances[#instances] .. ", "
+            if FONTS.medodica:getWidth(instances[#instances] .. scene:getUID()) > love.graphics.getWidth() then
+                table.insert(instances, "")
+            end
+            instances[#instances] = instances[#instances] .. scene:getUID()
         end
-        instances[#instances] = instances[#instances] .. scene:getUID()
     end
     for i, text in pairs(instances) do
         love.graphics.print(text, 0, love.graphics.getHeight() - font_height * (#instances - i + 1))
     end
-
-    self.parent:debugDraw()
 end
 
 return Debug

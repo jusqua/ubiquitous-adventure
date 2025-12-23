@@ -1,4 +1,5 @@
 local Scene = require "src.primitives.scene"
+local layers = require "src.constants.layers"
 
 ---@class Collider : Scene
 ---@field super Scene
@@ -13,6 +14,7 @@ function Collider.new(args)
     local self = setmetatable(Collider.super.new(), { __index = Collider })
     args = args or {}
 
+    self.target_layer = args.target_layer or layers.default
     self.collisions = {}
     self.width = args.width or args.size or 0
     self.height = args.height or args.size or 0
@@ -25,10 +27,9 @@ function Collider:update(dt)
         return
     end
 
-
     self.collisions = {}
     local root = self:getFamilyRoot()
-    for _, scene in pairs(root.family_list.children) do
+    for _, scene in pairs(root.layer_list.children[self.target_layer]) do
         if scene.id ~= self.id and scene:isInstanceOf(Collider) then
             if self:isCollidingWith(scene) then
                 table.insert(self.collisions, scene)
@@ -37,9 +38,7 @@ function Collider:update(dt)
     end
 end
 
-function Collider:debugDraw()
-    self.super.debugDraw(self)
-
+function Collider:debug()
     if #self.collisions > 0 then
         love.graphics.setColor(1, 0, 0, .5)
     else
