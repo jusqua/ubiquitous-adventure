@@ -1,7 +1,7 @@
 local uid = require 'utils.uid'
 local list = require 'utils.list'
-local LayerType = require 'enums.layers'
-local Object = require 'primitives.object'
+local LayerType = require 'enums.LayerType'
+local Object = require 'primitives.Object'
 
 ---@alias SceneId number
 ---@alias SceneMap table<SceneId,Scene>

@@ -1,7 +1,7 @@
-local Scene = require 'primitives.scene'
-local Timer = require 'primitives.timer'
-local FontType = require 'enums.fonts'
-local LayerType = require 'enums.layers'
+local Scene = require 'primitives.Scene'
+local Timer = require 'primitives.Timer'
+local FontType = require 'enums.FontType'
+local LayerType = require 'enums.LayerType'
 
 ---@class Debug : Scene
 ---@field super Scene

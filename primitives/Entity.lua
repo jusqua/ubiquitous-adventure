@@ -1,12 +1,12 @@
-local Scene = require 'primitives.scene'
-local Collider = require 'primitives.collider'
-local ShapeType = require 'enums.shapes'
-local draw = require('utils.draw')
+local Scene = require 'primitives.Scene'
+local Collider = require 'primitives.Collider'
+local ShapeType = require 'enums.ShapeType'
+local draw = require 'utils.draw'
 
 ---@class Entity : Scene, Shaped
 ---@field super Scene
 ---@field speed number
----@field color [number, number, number, number?]
+---@field color Color
 local Entity = Scene:inherit("Entity")
 
 ---@class EntityArgs : ColliderArgs

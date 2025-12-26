@@ -1,8 +1,8 @@
-local Scene = require "primitives.scene"
-local Debug = require "primitives.debug"
-local Entity = require 'primitives.entity'
-local Player = require "scenes.player"
-local Particle = require "scenes.particle"
+local Scene = require 'primitives.Scene'
+local Debug = require 'primitives.Debug'
+local Entity = require 'primitives.Entity'
+local Player = require 'scenes.Player'
+local Particle = require 'scenes.Particle'
 
 ---@type Scene
 local scene

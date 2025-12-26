@@ -1,7 +1,7 @@
 ---@enum ShapeType
-local M = {
+local ShapeType = {
     RECTANGLE = "rectangle",
     CIRCLE = "circle",
 }
 
-return M
+return ShapeType

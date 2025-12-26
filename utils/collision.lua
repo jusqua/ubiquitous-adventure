@@ -1,11 +1,11 @@
-local ShapeType = require 'enums.shapes'
+local ShapeType = require 'enums.ShapeType'
 
-local M = {}
+local collision = {}
 
 ---@param r1 Shaped
 ---@param r2 Shaped
 ---@return boolean
-function M.betweenRectangleRectangle(r1, r2)
+function collision.betweenRectangleRectangle(r1, r2)
     local r1x1 = r1.x - r1.width / 2
     local r1y1 = r1.y - r1.height / 2
     local r1x2 = r1.x + r1.width / 2
@@ -20,7 +20,7 @@ end
 ---@param c1 Shaped
 ---@param c2 Shaped
 ---@return boolean
-function M.betweenCircleCircle(c1, c2)
+function collision.betweenCircleCircle(c1, c2)
     local dx = c1.x + c1.radius / 2 - c2.x
     local dy = c1.y + c1.radius / 2 - c2.y
     local d = math.sqrt(dx * dx + dy * dy)
@@ -30,7 +30,7 @@ end
 ---@param c Shaped
 ---@param r Shaped
 ---@return boolean
-function M.betweenCircleRectangle(c, r)
+function collision.betweenCircleRectangle(c, r)
     local rx = math.max(r.x - r.width / 2, math.min(c.x, r.x + r.width / 2))
     local ry = math.max(r.y - r.height / 2, math.min(c.y, r.y + r.height / 2))
     local dx = rx - c.x
@@ -42,20 +42,20 @@ end
 ---@type table<ShapeType, table<ShapeType, fun(first: Shaped, second: Shaped): boolean>>
 local collision_map = {
     [ShapeType.RECTANGLE] = {
-        [ShapeType.RECTANGLE] = M.betweenRectangleRectangle,
-        [ShapeType.CIRCLE] = function(r, c) return M.betweenCircleRectangle(c, r) end
+        [ShapeType.RECTANGLE] = collision.betweenRectangleRectangle,
+        [ShapeType.CIRCLE] = function(r, c) return collision.betweenCircleRectangle(c, r) end
     },
     [ShapeType.CIRCLE] = {
-        [ShapeType.RECTANGLE] = M.betweenCircleRectangle,
-        [ShapeType.CIRCLE] = M.betweenCircleCircle
+        [ShapeType.RECTANGLE] = collision.betweenCircleRectangle,
+        [ShapeType.CIRCLE] = collision.betweenCircleCircle
     },
 }
 
 ---@param first Shaped
 ---@param second Shaped
 ---@return boolean
-M.between = function(first, second)
+collision.between = function(first, second)
     return collision_map[first.shape_type][second.shape_type](first, second)
 end
 
-return M
+return collision

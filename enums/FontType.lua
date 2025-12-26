@@ -1,6 +1,6 @@
 ---@enum FontType
-local M = {
+local FontType = {
     MEDODICA = love.graphics.newFont("assets/fonts/medodica.otf", 16, "none")
 }
 
-return M
+return FontType
