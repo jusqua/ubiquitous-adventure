@@ -1,16 +1,16 @@
 local uid = require "src.utils.uid"
 local list = require "src.utils.list"
-local LAYERS = require "src.constants.layers"
+local LayerType = require "src.constants.layers"
 local Object = require 'src.primitives.object'
 
 ---@alias SceneId number
 ---@alias SceneMap table<SceneId,Scene>
----@alias LayersMap table<LayerId,SceneMap>
+---@alias LayersMap table<LayerType,SceneMap>
 
 ---@class Scene : Object
 ---@field super Object
 ---@field id SceneId
----@field current_layer LayerId
+---@field current_layer LayerType
 ---@field parent Scene?
 ---@field scene_tree { count: number, children: SceneMap }
 ---@field layer_list { count: number, children: LayersMap }
@@ -23,7 +23,7 @@ local Scene = Object:inherit("Scene")
 function Scene.new()
     local self = setmetatable(Scene.super.new(), { __index = Scene })
     self.id = uid.generate()
-    self.current_layer = LAYERS.default
+    self.current_layer = LayerType.DEFAULT
     self.parent = nil
     self.x = 0
     self.y = 0
@@ -37,7 +37,7 @@ function Scene.new()
         count = 0,
         children = {}
     }
-    for _, layer in pairs(LAYERS) do
+    for _, layer in pairs(LayerType) do
         self.layer_list.children[layer] = {}
     end
 
@@ -56,7 +56,7 @@ end
 function Scene:draw()
     local draw_list = {}
 
-    local layers = list.values(LAYERS)
+    local layers = list.values(LayerType)
     table.sort(layers, function(a, b)
         return a < b
     end)

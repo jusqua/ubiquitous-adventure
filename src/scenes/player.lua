@@ -1,16 +1,19 @@
+local ShapeType = require "src.constants.shapes"
 local Entity = require 'src.primitives.entity'
-local LAYERS = require("src.constants.layers")
+local LayerType = require("src.constants.layers")
 
 ---@class Player : Entity
 ---@field super Entity
 local Player = Entity:inherit("Player")
 
----@param args { x?: number, y?: number, size?: number, width?: number, height?: number, speed?: number, color?: [number, number, number, number?] }
+---@param args EntityArgs?
 ---@return Player
 function Player.new(args)
+    ---@type EntityArgs
     args = args or {}
     args.collidable = true
-    args.target_layer = LAYERS.default
+    args.target_layer = LayerType.DEFAULT
+    args.shape_type = ShapeType.CIRCLE
 
     return setmetatable(Player.super.new(args), { __index = Player })
 end

@@ -1,9 +1,9 @@
----@alias LayerId number
+---@enum LayerType
 local M = {
-    background = 0,
-    default = 1,
-    ui = 100,
-    debug = math.huge,
+    BACKGROUND = 0,
+    DEFAULT = 1,
+    UI = 100,
+    DEBUG = math.huge,
 }
 
 return M

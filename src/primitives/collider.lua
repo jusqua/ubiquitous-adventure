@@ -1,81 +1,73 @@
 local Scene = require "src.primitives.scene"
-local LAYERS = require "src.constants.layers"
+local LayerType = require "src.constants.layers"
+local ShapeType = require "src.constants.shapes"
+local collision = require "src.utils.collision"
+local draw = require("src.utils.draw")
 
----@class Collider : Scene
+---@class Collider : Scene, Shaped
 ---@field super Scene
----@field width number
----@field height number
----@field target_layer LayerId
+---@field target_layer LayerType
 ---@field collisions Collider[]
 local Collider = Scene:inherit("Collider")
 
----@param args? { size?: number, width?: number, height?: number, target_layer?: LayerId }
+---@class ColliderArgs
+---@field size number?
+---@field width number?
+---@field height number?
+---@field radius number?
+---@field shape_type ShapeType?
+---@field target_layer LayerType?
+
+---@param args ColliderArgs?
 ---@return Collider
 function Collider.new(args)
     local self = setmetatable(Collider.super.new(), { __index = Collider })
     args = args or {}
 
-    self.target_layer = args.target_layer or LAYERS.default
-    self.width = args.width or args.size or 0
-    self.height = args.height or args.size or 0
+    self.target_layer = args.target_layer or LayerType.DEFAULT
+    self.shape_type = args.shape_type or ShapeType.RECTANGLE
+    self.radius = args.radius or args.width or args.height or args.size or 0
+    self.width = args.width or args.height or args.radius or args.size or 0
+    self.height = args.height or args.width or args.radius or args.size or 0
     self.collisions = {}
     return self
 end
 
 function Collider:update(dt)
-    self.super.update(self, dt)
     if not self.parent then
         return
     end
 
+    self.super.update(self, dt)
+    self.x = self.parent.x
+    self.y = self.parent.y
     self.collisions = {}
+
     local root = self:getFamilyRoot()
-    for _, scene in pairs(root.layer_list.children[self.target_layer]) do
-        if scene.id ~= self.id and scene:isInstanceOf(Collider) then
-            if self:isCollidingWith(scene) then
-                table.insert(self.collisions, scene)
+    for _, other in pairs(root.layer_list.children[self.target_layer]) do
+        if other.id ~= self.id and other:isInstanceOf(Collider) then
+            ---@cast other Collider
+            if collision.between(self, other) then
+                table.insert(self.collisions, other)
             end
         end
     end
 end
 
 function Collider:debug()
+    if not self.parent then
+        return
+    end
+
     if #self.collisions > 0 then
         love.graphics.setColor(1, 0, 0, .5)
     else
         love.graphics.setColor(1, 1, 0, .5)
     end
-    local collider = self.parent or self
-    love.graphics.rectangle(
-        "fill",
-        collider.x - self.width / 2,
-        collider.y - self.height / 2,
-        self.width,
-        self.height
-    )
-end
 
----@return { x1: number, y1: number, x2: number, y2: number }
-function Collider:getBounds()
-    local collider = self.parent or self
-    return {
-        x1 = collider.x - self.width / 2,
-        y1 = collider.y - self.height / 2,
-        x2 = collider.x + self.width / 2,
-        y2 = collider.y + self.height / 2
-    }
-end
-
----@param other Collider
-function Collider:isCollidingWith(other)
-    local self_bounds = self:getBounds()
-    local other_bounds = other:getBounds()
-    return (
-        self_bounds.x1 < other_bounds.x2 and
-        self_bounds.y1 < other_bounds.y2 and
-        self_bounds.x2 > other_bounds.x1 and
-        self_bounds.y2 > other_bounds.y1
-    )
+    self.x = self.parent.x
+    self.y = self.parent.y
+    draw.shaped(self)
 end
 
 return Collider

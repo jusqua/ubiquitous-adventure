@@ -1,13 +1,15 @@
 local Entity = require "src.primitives.entity"
+local draw = require("src.utils.draw")
 
 ---@class Particle : Entity
 ---@field super Entity
----@field original_size number
+---@field original_radius number
 ---@field decay_factor number
 local Particle = Entity:inherit("Particle")
 
 ---@return Particle
 function Particle.new()
+    ---@type EntityArgs
     local args = {
         collidable = false,
         color = { math.random(127, 255) / 255, math.random(127, 255) / 255, math.random(127, 255) / 255, 1 },
@@ -17,7 +19,7 @@ function Particle.new()
     }
 
     local self = setmetatable(Particle.super.new(args), { __index = Particle })
-    self.original_size = self.width
+    self.original_radius = self.radius
     self.decay_factor = math.random(3, 5)
     return self
 end
@@ -25,17 +27,17 @@ end
 function Particle:update(dt)
     self.super.update(self, dt)
 
-    self.width = self.width - self.decay_factor * dt
-    self.height = self.width
-    if self.width <= 0 then
+    self.radius = self.radius - self.decay_factor * dt
+    self.height = self.radius
+    if self.radius <= 0 then
         self:destroy()
     end
 end
 
 function Particle:draw()
-    self.color[4] = self.width / self.original_size
+    self.color[4] = self.radius / self.original_radius
     love.graphics.setColor(self.color)
-    love.graphics.circle("fill", self.x - self.width / 2, self.y - self.width / 2, self.width)
+    draw.circle(self)
 end
 
 return Particle

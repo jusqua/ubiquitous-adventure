@@ -1,7 +1,7 @@
 local Scene = require "src.primitives.scene"
 local Timer = require "src.primitives.timer"
-local FONTS = require 'src.constants.fonts'
-local LAYERS = require "src.constants.layers"
+local FontType = require 'src.constants.fonts'
+local LayerType = require "src.constants.layers"
 
 ---@class Debug : Scene
 ---@field super Scene
@@ -13,7 +13,7 @@ local Debug = Scene:inherit("Debug")
 ---@return Debug
 function Debug.new()
     local self = setmetatable(Debug.super.new(), { __index = Debug })
-    self.current_layer = LAYERS.debug
+    self.current_layer = LayerType.DEBUG
     self.fps_count = 0
     self.used_mem = 0
     self.vsync_state = 0
@@ -52,9 +52,10 @@ function Debug:debug()
         return
     end
 
-    local font_height = FONTS.medodica:getHeight()
+    local font = FontType.MEDODICA
+    local font_height = font:getHeight()
     love.graphics.setColor(1, 0, 1)
-    love.graphics.setFont(FONTS.medodica)
+    love.graphics.setFont(font)
     love.graphics.print("Instances: " .. self.parent.layer_list.count + 1)
     love.graphics.print("Used Memory: " .. self.used_mem .. " Kb", 0, font_height)
     love.graphics.print("FPS: " .. self.fps_count .. (self.vsync_state ~= 0 and " (VSync)" or ""), 0, font_height * 2)
@@ -63,7 +64,7 @@ function Debug:debug()
     for _, scenes in pairs(self.parent.layer_list.children) do
         for _, scene in pairs(scenes) do
             instances[#instances] = instances[#instances] .. ", "
-            if FONTS.medodica:getWidth(instances[#instances] .. scene:getUID()) > love.graphics.getWidth() then
+            if font:getWidth(instances[#instances] .. scene:getUID()) > love.graphics.getWidth() then
                 table.insert(instances, "")
             end
             instances[#instances] = instances[#instances] .. scene:getUID()
