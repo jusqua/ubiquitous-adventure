@@ -1,23 +1,24 @@
 local Scene = require "src.primitives.scene"
-local layers = require "src.constants.layers"
+local LAYERS = require "src.constants.layers"
 
 ---@class Collider : Scene
 ---@field super Scene
 ---@field width number
 ---@field height number
+---@field target_layer LayerId
 ---@field collisions Collider[]
 local Collider = Scene:inherit("Collider")
 
----@param args? { size?: number, width?: number, height?: number }
+---@param args? { size?: number, width?: number, height?: number, target_layer?: LayerId }
 ---@return Collider
 function Collider.new(args)
     local self = setmetatable(Collider.super.new(), { __index = Collider })
     args = args or {}
 
-    self.target_layer = args.target_layer or layers.default
-    self.collisions = {}
+    self.target_layer = args.target_layer or LAYERS.default
     self.width = args.width or args.size or 0
     self.height = args.height or args.size or 0
+    self.collisions = {}
     return self
 end
 

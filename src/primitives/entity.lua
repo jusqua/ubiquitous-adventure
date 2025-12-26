@@ -9,7 +9,7 @@ local Collider = require "src.primitives.collider"
 ---@field color [number, number, number, number?]
 local Entity = Scene:inherit("Entity")
 
----@param args { collidable?: boolean, x?: number, y?: number, size?: number, width?: number, height?: number, speed?: number, color?: [number, number, number, number?] }
+---@param args { collidable?: boolean, x?: number, y?: number, size?: number, width?: number, height?: number, speed?: number, color?: [number, number, number, number?], target_layer?: LayerId }
 ---@return Entity
 function Entity.new(args)
     local self = setmetatable(Entity.super.new(), { __index = Entity })

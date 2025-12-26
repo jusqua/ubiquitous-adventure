@@ -1,4 +1,5 @@
 local Entity = require 'src.primitives.entity'
+local LAYERS = require("src.constants.layers")
 
 ---@class Player : Entity
 ---@field super Entity
@@ -9,6 +10,7 @@ local Player = Entity:inherit("Player")
 function Player.new(args)
     args = args or {}
     args.collidable = true
+    args.target_layer = LAYERS.default
 
     return setmetatable(Player.super.new(args), { __index = Player })
 end
