@@ -1,6 +1,6 @@
-local ShapeType = require "src.constants.shapes"
-local Entity = require 'src.primitives.entity'
-local LayerType = require("src.constants.layers")
+local ShapeType = require 'enums.shapes'
+local Entity = require 'primitives.entity'
+local LayerType = require('enums.layers')
 
 ---@class Player : Entity
 ---@field super Entity

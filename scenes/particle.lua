@@ -1,5 +1,5 @@
-local Entity = require "src.primitives.entity"
-local draw = require("src.utils.draw")
+local Entity = require 'primitives.entity'
+local draw = require('utils.draw')
 
 ---@class Particle : Entity
 ---@field super Entity

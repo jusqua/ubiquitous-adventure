@@ -1,4 +1,4 @@
-local ShapeType = require "src.constants.shapes"
+local ShapeType = require 'enums.shapes'
 
 local M = {}
 

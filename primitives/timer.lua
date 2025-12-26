@@ -1,4 +1,4 @@
-local Scene = require "src.primitives.scene"
+local Scene = require 'primitives.scene'
 
 ---@class Timer : Scene
 ---@field super Scene

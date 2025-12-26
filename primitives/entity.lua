@@ -1,7 +1,7 @@
-local Scene = require "src.primitives.scene"
-local Collider = require "src.primitives.collider"
-local ShapeType = require "src.constants.shapes"
-local draw = require("src.utils.draw")
+local Scene = require 'primitives.scene'
+local Collider = require 'primitives.collider'
+local ShapeType = require 'enums.shapes'
+local draw = require('utils.draw')
 
 ---@class Entity : Scene, Shaped
 ---@field super Scene

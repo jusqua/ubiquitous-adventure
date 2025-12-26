@@ -1,8 +1,8 @@
-local Scene = require "src.primitives.scene"
-local LayerType = require "src.constants.layers"
-local ShapeType = require "src.constants.shapes"
-local collision = require "src.utils.collision"
-local draw = require("src.utils.draw")
+local Scene = require 'primitives.scene'
+local LayerType = require 'enums.layers'
+local ShapeType = require 'enums.shapes'
+local collision = require 'utils.collision'
+local draw = require('utils.draw')
 
 ---@class Collider : Scene, Shaped
 ---@field super Scene
