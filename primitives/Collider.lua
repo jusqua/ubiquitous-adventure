@@ -45,7 +45,7 @@ function Collider:update(dt)
 
     local root = self:getFamilyRoot()
     for _, other in pairs(root.layer_list.children[self.target_layer]) do
-        if other.id ~= self.id and other:isInstanceOf(Collider) then
+        if other.id ~= self.id and other:is(Collider) then
             ---@cast other Collider
             if collision.between(self, other) then
                 table.insert(self.collisions, other)

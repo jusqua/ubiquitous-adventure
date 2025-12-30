@@ -66,7 +66,7 @@ function Scene:draw()
         table.sort(scene_list, function(a, b)
             return a.z < b.z
         end)
-        list.append(draw_list, scene_list)
+        list.concat(draw_list, scene_list)
     end
 
     for _, scene in pairs(draw_list) do
@@ -80,7 +80,7 @@ end
 
 ---Return an Unique Identifier of the scene
 function Scene:getUID()
-    return self.id .. ":" .. self:getType()
+    return self.id .. ":" .. self:class()
 end
 
 ---Get the root scene

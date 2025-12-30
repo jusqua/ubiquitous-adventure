@@ -1,11 +1,12 @@
 ---@class Object
----@field super nil
----@field private __instance_of { [Object]: boolean }
+---@field super Object
+---@field private __is { [Object]: boolean }
+---@field private __name string
 local Object = {}
-Object.super = nil
 Object.__index = Object
+Object.super = Object
+Object.__is = { [Object] = true }
 Object.__name = "Object"
-Object.__instance_of = { [Object] = true }
 
 function Object.new()
     return setmetatable({}, { __index = Object })
@@ -13,22 +14,22 @@ end
 
 ---@param name string
 function Object:inherit(name)
-    local other = setmetatable(self.new(), { __index = self })
-    other.super = self
-    other.__name = name
-    other.__instance_of = { [other] = true }
-    for key, value in pairs(self.__instance_of) do
-        other.__instance_of[key] = value
+    local cls = setmetatable(self.new(), { __index = self })
+    cls.super = self
+    cls.__name = name
+    cls.__is = { [cls] = true }
+    for key, value in pairs(self.__is) do
+        cls.__is[key] = value
     end
-    return other
+    return cls
 end
 
----@param other Object
-function Object:isInstanceOf(other)
-    return self.__instance_of[other] or false
+---@param cls Object
+function Object:is(cls)
+    return self.__is[cls] or false
 end
 
-function Object:getType()
+function Object:class()
     return self.__name
 end
 

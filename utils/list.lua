@@ -1,7 +1,7 @@
 local list = {}
 
----@generic T
----@param t table<T, any>
+---@generic T any
+---@param t table
 ---@return T[]
 function list.keys(t)
     local l = {}
@@ -11,8 +11,8 @@ function list.keys(t)
     return l
 end
 
----@generic T
----@param t table<any, T>
+---@generic T any
+---@param t table
 ---@return T[]
 function list.values(t)
     local l = {}
@@ -22,12 +22,12 @@ function list.values(t)
     return l
 end
 
----@generic T
----@param self T[]
----@param other T[]
-function list.append(self, other)
-    for _, e in ipairs(other) do
-        table.insert(self, e)
+---@generic T any
+---@param l1 T[]
+---@param l2 T[]
+function list.concat(l1, l2)
+    for _, e in ipairs(l2) do
+        table.insert(l1, e)
     end
 end
 
