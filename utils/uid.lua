@@ -1,9 +1,15 @@
-local counter = -1
-local uid = {}
+---@alias UID integer
 
-function uid.generate()
-    counter = counter + 1
-    return counter
+--- Seed?
+local _counter = -1
+
+--- Generate a new UID
+---@return UID
+local function generate()
+    _counter = _counter + 1
+    return _counter
 end
 
-return uid
+return {
+    generate = generate,
+}

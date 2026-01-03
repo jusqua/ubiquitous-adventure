@@ -1,36 +1,44 @@
----@class Object
----@field super Object
----@field private __is { [Object]: boolean }
+--- The base class implementation
+---@class (exact) Object
+--- Map of inherited classes and implemented traits
+---@field private __is table<Object, boolean>
+--- Class defined name
 ---@field private __name string
 local Object = {}
 Object.__index = Object
-Object.super = Object
 Object.__is = { [Object] = true }
 Object.__name = "Object"
 
+--- Creates a new instance of the object
+---@return self
 function Object.new()
     return setmetatable({}, { __index = Object })
 end
 
 ---@param name string
 function Object:inherit(name)
-    local cls = setmetatable(self.new(), { __index = self })
-    cls.super = self
+    local cls = setmetatable({}, { __index = self })
     cls.__name = name
-    cls.__is = { [cls] = true }
-    for key, value in pairs(self.__is) do
-        cls.__is[key] = value
+    cls.__is = {}
+    for k, _ in pairs(self.__is) do
+        cls.__is[k] = true
     end
+    cls.__is[cls] = true
     return cls
 end
 
----@param cls Object
+--- Checks if the object is an instance of the given class
+---@generic T: Object
+---@param cls T
+---@return boolean
 function Object:is(cls)
     return self.__is[cls] or false
 end
 
-function Object:class()
-    return self.__name
+--- Return the name of the class of the given object
+---@return string
+function Object:className()
+    return self.__name or "Unknown"
 end
 
 return Object

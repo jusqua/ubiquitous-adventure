@@ -1,3 +1,1 @@
-function love.conf(t)
-
-end
+function love.conf(_t) end

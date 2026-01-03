@@ -1,9 +1,8 @@
-local list = {}
-
+--- Extract table keys to a list
 ---@generic T any
 ---@param t table
 ---@return T[]
-function list.keys(t)
+local function keys(t)
     local l = {}
     for k, _ in pairs(t) do
         table.insert(l, k)
@@ -11,10 +10,11 @@ function list.keys(t)
     return l
 end
 
+--- Extract table values to a list
 ---@generic T any
 ---@param t table
 ---@return T[]
-function list.values(t)
+local function values(t)
     local l = {}
     for _, v in pairs(t) do
         table.insert(l, v)
@@ -22,13 +22,22 @@ function list.values(t)
     return l
 end
 
----@generic T any
----@param l1 T[]
----@param l2 T[]
-function list.concat(l1, l2)
-    for _, e in ipairs(l2) do
-        table.insert(l1, e)
+--- Merge two or more lists into one
+---@generic T
+---@param p T[]
+---@param q T[]
+---@param ... T[]
+local function merge(p, q, ...)
+    for _, l in ipairs({ q, ... }) do
+        for _, e in ipairs(l) do
+            table.insert(p, e)
+        end
     end
 end
 
-return list
+return {
+    keys = keys,
+    values = values,
+    concat = merge,
+    merge = merge,
+}

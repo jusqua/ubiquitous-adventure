@@ -1,14 +1,13 @@
-local uid = require 'utils.uid'
-local list = require 'utils.list'
-local LayerType = require 'enums.LayerType'
-local Object = require 'primitives.Object'
+local LayerType = require("enums.LayerType")
+local Object = require("primitives.Object")
+local list = require("utils.list")
+local uid = require("utils.uid")
 
 ---@alias SceneId number
 ---@alias SceneMap table<SceneId,Scene>
 ---@alias LayersMap table<LayerType,SceneMap>
 
----@class Scene : Object
----@field super Object
+---@class (exact) Scene: Object
 ---@field id SceneId
 ---@field current_layer LayerType
 ---@field parent Scene?
@@ -19,9 +18,9 @@ local Object = require 'primitives.Object'
 ---@field z number
 local Scene = Object:inherit("Scene")
 
----@return Scene
 function Scene.new()
-    local self = setmetatable(Scene.super.new(), { __index = Scene })
+    local self = setmetatable({}, { __index = Scene })
+
     self.id = uid.generate()
     self.current_layer = LayerType.DEFAULT
     self.parent = nil
@@ -31,11 +30,11 @@ function Scene.new()
 
     self.scene_tree = {
         count = 0,
-        children = {}
+        children = {},
     }
     self.layer_list = {
         count = 0,
-        children = {}
+        children = {},
     }
     for _, layer in pairs(LayerType) do
         self.layer_list.children[layer] = {}
@@ -44,7 +43,7 @@ function Scene.new()
     return self
 end
 
----Perform update actions on scene. When override, parent method must be called.
+--- Perform update actions on scene. When override, parent method must be called.
 ---@param dt number delta time
 function Scene:update(dt)
     for _, scene in pairs(self.scene_tree.children) do
@@ -52,7 +51,7 @@ function Scene:update(dt)
     end
 end
 
----Perform draw actions on scene. When override, parent method should not be called.
+--- Perform draw actions on scene. When override, parent method should not be called.
 function Scene:draw()
     local draw_list = {}
 
@@ -74,16 +73,15 @@ function Scene:draw()
     end
 end
 
----Perform draw actions on scene for debugging purposes.
-function Scene:debug()
-end
+--- Perform draw actions on scene for debugging purposes.
+function Scene:debug() end
 
----Return an Unique Identifier of the scene
+--- Return an Unique Identifier of the scene
 function Scene:getUID()
-    return self.id .. ":" .. self:class()
+    return self.id .. ":" .. self:className()
 end
 
----Get the root scene
+--- Get the root scene
 ---@return Scene
 function Scene:getFamilyRoot()
     if self.parent then
@@ -92,7 +90,7 @@ function Scene:getFamilyRoot()
     return self
 end
 
----Assign the scene as parent to the given scene
+--- Assign the scene as parent to the given scene
 ---@param other Scene
 function Scene:attach(other)
     other:detach()
@@ -119,7 +117,7 @@ function Scene:attach(other)
     other.parent = self
 end
 
----Turn the scene orphaned
+--- Turn the scene orphaned
 function Scene:detach()
     if not self.parent then
         return
@@ -148,7 +146,7 @@ function Scene:detach()
     self.parent = nil
 end
 
----Destroy the scene and its children
+--- Destroy the scene and its children
 function Scene:destroy()
     for _, scene in pairs(self.scene_tree.children) do
         scene:destroy()

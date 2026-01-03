@@ -1,8 +1,9 @@
-local Scene = require 'primitives.Scene'
-local Debug = require 'primitives.Debug'
-local Entity = require 'primitives.Entity'
-local Player = require 'scenes.Player'
-local Particle = require 'scenes.Particle'
+local Debug = require("primitives.Debug")
+local Entity = require("primitives.Entity")
+local Particle = require("scenes.Particle")
+local Player = require("scenes.Player")
+local Rectangle = require("primitives.Rectangle")
+local Scene = require("primitives.Scene")
 
 ---@type Scene
 local scene
@@ -13,9 +14,7 @@ function love.load()
     scene = Scene.new()
     scene:attach(Player.new({ speed = 200 }))
     scene:attach(Entity.new({
-        size = 40,
-        x = love.graphics.getWidth() / 2 - 20,
-        y = love.graphics.getHeight() / 2 - 20
+        shape = Rectangle.new(love.graphics.getWidth() / 2 - 20, love.graphics.getHeight() / 2 - 20, 40, 40),
     }))
     debug = Debug.new()
 end
@@ -24,7 +23,7 @@ function love.update(dt)
     scene:update(dt)
 end
 
-function love.keypressed(key, scancode, isrepeat)
+function love.keypressed(key, _scancode, _isrepeat)
     if key == "escape" then
         love.event.quit()
     end

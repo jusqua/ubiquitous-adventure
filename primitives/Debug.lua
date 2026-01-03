@@ -1,18 +1,17 @@
-local Scene = require 'primitives.Scene'
-local Timer = require 'primitives.Timer'
-local FontType = require 'enums.FontType'
-local LayerType = require 'enums.LayerType'
+local FontType = require("enums.FontType")
+local LayerType = require("enums.LayerType")
+local Scene = require("primitives.Scene")
+local Timer = require("primitives.Timer")
 
----@class Debug : Scene
----@field super Scene
+---@class (exact) Debug: Scene
 ---@field fps_count number
 ---@field used_mem number
 ---@field vsync_state number
 local Debug = Scene:inherit("Debug")
 
----@return Debug
 function Debug.new()
-    local self = setmetatable(Debug.super.new(), { __index = Debug })
+    local self = setmetatable(Scene.new(), { __index = Debug })
+
     self.current_layer = LayerType.DEBUG
     self.fps_count = 0
     self.used_mem = 0
@@ -23,15 +22,16 @@ function Debug.new()
         fn = function()
             self.fps_count = math.floor(love.timer.getFPS())
             self.vsync_state = love.window.getVSync()
-        end
+        end,
     }))
     self:attach(Timer.new({
         leading = true,
         interval = 3,
         fn = function()
             self.used_mem = math.floor(collectgarbage("count"))
-        end
+        end,
     }))
+
     return self
 end
 

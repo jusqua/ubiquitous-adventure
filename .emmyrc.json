@@ -1,6 +1,33 @@
 {
   "$schema": "https://raw.githubusercontent.com/EmmyLuaLs/emmylua-analyzer-rust/refs/heads/main/crates/emmylua_code_analysis/resources/schema.json",
   "runtime": { "version": "LuaJIT" },
+  "format": {
+    "externalTool": {
+      "program": "stylua",
+      "args": [
+        "-",
+        "--stdin-filepath",
+        "${file}",
+        "--indent-width=${indent_size}",
+        "--indent-type",
+        "${use_tabs?Tabs:Spaces}"
+      ]
+    },
+    "externalToolRangeFormat": {
+      "program": "stylua",
+      "args": [
+        "-",
+        "--stdin-filepath",
+        "${file}",
+        "--indent-width=${indent_size}",
+        "--indent-type",
+        "${use_tabs?Tabs:Spaces}",
+        "--range-start=${start_offset}",
+        "--range-end=${end_offset}"
+      ],
+      "timeout": 5000
+    }
+  },
   "workspace": {
     "library": ["./api"]
   }

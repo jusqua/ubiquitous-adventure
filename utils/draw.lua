@@ -1,40 +1,40 @@
-local ShapeType = require 'enums.ShapeType'
+local Circle = require("primitives.Circle")
+local Rectangle = require("primitives.Rectangle")
 
-local draw = {}
+--- Set environment color
+---@param c Color
+local function setColor(c)
+    love.graphics.setColor(c.r, c.g, c.b, c.a)
+end
 
+--- Draw a circle
 ---@param c Circle
 ---@param draw_mode love.DrawMode?
-function draw.circle(c, draw_mode)
-    love.graphics.circle(
-        draw_mode or "fill",
-        c.x,
-        c.y,
-        c.radius
-    )
+local function circle(c, draw_mode)
+    love.graphics.circle(draw_mode or "fill", c.x, c.y, c.radius)
 end
 
+--- Draw a rectangle
 ---@param r Rectangle
 ---@param draw_mode love.DrawMode?
-function draw.rectangle(r, draw_mode)
-    love.graphics.rectangle(
-        draw_mode or "fill",
-        r.x - r.width / 2,
-        r.y - r.height / 2,
-        r.width,
-        r.height
-    )
+local function rectangle(r, draw_mode)
+    love.graphics.rectangle(draw_mode or "fill", r.x - r.width / 2, r.y - r.height / 2, r.width, r.height)
 end
 
----@type table<ShapeType, fun(shape: Shaped, draw_mode: love.DrawMode?)>
-local draw_shape_map = {
-    [ShapeType.RECTANGLE] = draw.rectangle,
-    [ShapeType.CIRCLE] = draw.circle,
-}
-
----@param s Shaped
+--- Draw based on given shape
+---@param s Shape
 ---@param draw_mode love.DrawMode?
-draw.shaped = function(s, draw_mode)
-    draw_shape_map[s.shape_type](s, draw_mode)
+local function shape(s, draw_mode)
+    if s:is(Circle) then ---@cast s Circle
+        circle(s, draw_mode)
+    elseif s:is(Rectangle) then ---@cast s Rectangle
+        rectangle(s, draw_mode)
+    end
 end
 
-return draw
+return {
+    setColor = setColor,
+    circle = circle,
+    rectangle = rectangle,
+    shape = shape,
+}

@@ -1,11 +1,10 @@
-local ShapeType = require 'enums.ShapeType'
+local Circle = require("primitives.Circle")
+local Rectangle = require("primitives.Rectangle")
 
-local collision = {}
-
----@param r1 Shaped
----@param r2 Shaped
+---@param r1 Rectangle
+---@param r2 Rectangle
 ---@return boolean
-function collision.betweenRectangleRectangle(r1, r2)
+local function collisionBetweenRectangleRectangle(r1, r2)
     local r1x1 = r1.x - r1.width / 2
     local r1y1 = r1.y - r1.height / 2
     local r1x2 = r1.x + r1.width / 2
@@ -17,20 +16,20 @@ function collision.betweenRectangleRectangle(r1, r2)
     return r1x1 < r2x2 and r1x2 > r2x1 and r1y1 < r2y2 and r1y2 > r2y1
 end
 
----@param c1 Shaped
----@param c2 Shaped
+---@param c1 Circle
+---@param c2 Circle
 ---@return boolean
-function collision.betweenCircleCircle(c1, c2)
+local function collisionBetweenCircleCircle(c1, c2)
     local dx = c1.x + c1.radius / 2 - c2.x
     local dy = c1.y + c1.radius / 2 - c2.y
     local d = math.sqrt(dx * dx + dy * dy)
     return d < c1.radius / 2 + c2.radius / 2
 end
 
----@param c Shaped
----@param r Shaped
+---@param c Circle
+---@param r Rectangle
 ---@return boolean
-function collision.betweenCircleRectangle(c, r)
+local function collisionBetweenCircleRectangle(c, r)
     local rx = math.max(r.x - r.width / 2, math.min(c.x, r.x + r.width / 2))
     local ry = math.max(r.y - r.height / 2, math.min(c.y, r.y + r.height / 2))
     local dx = rx - c.x
@@ -39,23 +38,23 @@ function collision.betweenCircleRectangle(c, r)
     return d < c.radius
 end
 
----@type table<ShapeType, table<ShapeType, fun(first: Shaped, second: Shaped): boolean>>
-local collision_map = {
-    [ShapeType.RECTANGLE] = {
-        [ShapeType.RECTANGLE] = collision.betweenRectangleRectangle,
-        [ShapeType.CIRCLE] = function(r, c) return collision.betweenCircleRectangle(c, r) end
-    },
-    [ShapeType.CIRCLE] = {
-        [ShapeType.RECTANGLE] = collision.betweenCircleRectangle,
-        [ShapeType.CIRCLE] = collision.betweenCircleCircle
-    },
-}
-
----@param first Shaped
----@param second Shaped
+--- Check if two shapes collided
+---@param p Shape
+---@param q Shape
 ---@return boolean
-collision.between = function(first, second)
-    return collision_map[first.shape_type][second.shape_type](first, second)
+local function between(p, q)
+    if p:is(Circle) and q:is(Circle) then ---@cast p Circle ---@cast q Circle
+        return collisionBetweenCircleCircle(p, q)
+    elseif p:is(Circle) and q:is(Rectangle) then ---@cast p Circle ---@cast q Rectangle
+        return collisionBetweenCircleRectangle(p, q)
+    elseif p:is(Rectangle) and q:is(Circle) then ---@cast p Rectangle ---@cast q Circle
+        return collisionBetweenCircleRectangle(q, p)
+    elseif p:is(Rectangle) and q:is(Rectangle) then ---@cast p Rectangle ---@cast q Rectangle
+        return collisionBetweenRectangleRectangle(p, q)
+    end
+    return false
 end
 
-return collision
+return {
+    between = between,
+}

@@ -1,4 +1,4 @@
-local utils = require 'scripts.utils'
+local utils = require("scripts.utils")
 
 local batch = {
     utils.rmdir("api"),
@@ -16,7 +16,7 @@ local batch = {
     utils.move("love-api/api", "."),
 
     utils.rmdir("EmmyLuaLOVEGenerator"),
-    utils.rmdir("love-api")
+    utils.rmdir("love-api"),
 }
 
 for _, command in ipairs(batch) do
