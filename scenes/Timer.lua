@@ -1,4 +1,4 @@
-local Scene = require("primitives.Scene")
+local Scene = require("scenes.Scene")
 
 ---@class (exact) Timer: Scene
 ---@field interval number

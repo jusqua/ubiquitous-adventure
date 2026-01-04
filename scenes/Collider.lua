@@ -1,6 +1,6 @@
 local LayerType = require("enums.LayerType")
 local Rectangle = require("primitives.Rectangle")
-local Scene = require("primitives.Scene")
+local Scene = require("scenes.Scene")
 local collision = require("utils.collision")
 local draw = require("utils.draw")
 

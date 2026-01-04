@@ -1,5 +1,5 @@
 local Circle = require("primitives.Circle")
-local Entity = require("primitives.Entity")
+local Entity = require("scenes.Entity")
 local LayerType = require("enums.LayerType")
 
 ---@class (exact) Player: Entity

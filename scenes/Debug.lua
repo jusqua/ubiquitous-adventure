@@ -1,7 +1,7 @@
 local FontType = require("enums.FontType")
 local LayerType = require("enums.LayerType")
-local Scene = require("primitives.Scene")
-local Timer = require("primitives.Timer")
+local Scene = require("scenes.Scene")
+local Timer = require("scenes.Timer")
 
 ---@class (exact) Debug: Scene
 ---@field fps_count number

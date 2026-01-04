@@ -1,5 +1,5 @@
 local Color = require("primitives.Color")
-local Entity = require("primitives.Entity")
+local Entity = require("scenes.Entity")
 local draw = require("utils.draw")
 
 ---@class (exact) Particle: Entity

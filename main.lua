@@ -1,9 +1,9 @@
-local Debug = require("primitives.Debug")
-local Entity = require("primitives.Entity")
+local Debug = require("scenes.Debug")
+local Entity = require("scenes.Entity")
 local Particle = require("scenes.Particle")
 local Player = require("scenes.Player")
 local Rectangle = require("primitives.Rectangle")
-local Scene = require("primitives.Scene")
+local Scene = require("scenes.Scene")
 
 ---@type Scene
 local scene

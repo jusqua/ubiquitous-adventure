@@ -1,7 +1,7 @@
-local Collider = require("primitives.Collider")
+local Collider = require("scenes.Collider")
 local Color = require("primitives.Color")
 local Rectangle = require("primitives.Rectangle")
-local Scene = require("primitives.Scene")
+local Scene = require("scenes.Scene")
 local draw = require("utils.draw")
 
 ---@class (exact) Entity: Scene
